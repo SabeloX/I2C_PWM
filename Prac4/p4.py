@@ -14,7 +14,8 @@ btn_submit = 16
 btn_increase = 18
 buzzer = None
 eeprom = ES2EEPROMUtils.ES2EEPROM()
-
+p4 = None
+p5 = None
 
 # Print the game banner
 def welcome():
@@ -67,7 +68,32 @@ def setup():
     # Setup regular GPIO
     # Setup PWM channels
     # Setup debouncing and callbacks
-    pass
+    	GPIO.setmode(GPIO.BOARD)
+    	GPIO.setup(3, GPIO.OUT) #SCL
+	GPIO.setup(5, GPIO.OUT) #
+	GPIO.setup(11, GPIO.OUT) #LED
+	GPIO.setup(13, GPIO.OUT) #LED
+	GPIO.setup(15, GPIO.OUT) #LED
+	GPIO.setup(32, GPIO.OUT) #LED
+	GPIO.setup(33, GPIO.OUT)
+	GPIO.setup(16, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
+	GPIO.setup(18, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
+
+	p1 = GPIO.PWM(11, 60)
+	p2 = GPIO.PWM(13, 60)
+	p3 = GPIO.PWM(15, 60)
+
+	global p4
+	p4 = GPIO.PWM(32, 95)
+
+	global p5
+	p5 = GPIO.PWM(33, 95)
+
+	GPIO.output(13, True)
+
+	GPIO.add_event_detect(16, GPIO.RISING, callback=btn_guess_pressed, bouncetime=300)
+	GPIO.add_event_detect(18, GPIO.RISING, callback=btn_increase_pressed, bouncetime=150)
+    	pass
 
 
 # Load high scores
@@ -75,9 +101,9 @@ def fetch_scores():
     # get however many scores there are
     score_count = None
     # Get the scores
-    
+
     # convert the codes back to ascii
-    
+
     # return back the results
     return score_count, scores
 
